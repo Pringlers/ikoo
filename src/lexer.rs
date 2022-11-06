@@ -86,6 +86,9 @@ impl<'src> Lexer<'src> {
         // Check float
         let mut src = self.src.clone();
         if src.next() == Some('.') && matches!(src.next(), Some('0'..='9')) {
+            self.src.next();
+            len += 1;
+
             while let Some(c) = self.src.peek().copied() {
                 if !c.is_ascii_digit() {
                     break;
