@@ -40,6 +40,10 @@ impl<'src> Lexer<'src> {
             return token;
         }
 
+        if let Some(token) = self.parse_str() {
+            return token;
+        }
+
         Token {
             span: self.capture(1),
             kind: TokenKind::Unknown,
@@ -127,6 +131,33 @@ impl<'src> Lexer<'src> {
                 kind: TokenKind::Identifier,
             })
         }
+    }
+
+    // TODO: Support escape characters such as \"
+    fn parse_str(&mut self) -> Option<Token> {
+        let mut len = 0u32;
+        let mut iter = false;
+
+        while let Some(c) = self.src.peek().copied() {
+            if c == '"' {
+                iter = true;
+            }
+
+            if !iter { return None }
+
+            len += c.len_utf8() as u32;
+            self.src.next();
+
+            if c == '"'{
+                break;
+            }
+        }
+
+        Some(Token {
+            span: self.capture(len),
+            kind: TokenKind::Str,
+        })
+
     }
 
     fn capture(&mut self, i: u32) -> Span {

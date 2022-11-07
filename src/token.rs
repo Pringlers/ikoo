@@ -17,6 +17,7 @@ pub enum TokenKind {
     Unknown,
     Whitespace,
     Identifier,
+    Str,
     Int,
     Float,
     LParen,
