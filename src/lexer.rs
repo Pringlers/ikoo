@@ -28,7 +28,6 @@ impl<'src> Lexer<'src> {
             return Token { span, kind: TokenKind::Eof };
         };
 
-
         if let Some(token) = self.parse_single(current) {
             return token;
         }
@@ -68,18 +67,18 @@ impl<'src> Lexer<'src> {
             _ => return None,
         };
 
-//        TODO: Implement comments - this currently doesn't work
-//        // Check for a comment
-//        let slash = '/';
-//        if kind == TokenKind::Slash && self.src.peek() == Some(&slash) {
-//            self.src.next();
-//            while let Some(c) = self.src.peek().copied() {
-//                self.src.next();
-//                if c == '\n' { break }
-//            }
-//
-//            return None
-//        }
+        //        TODO: Implement comments - this currently doesn't work
+        //        // Check for a comment
+        //        let slash = '/';
+        //        if kind == TokenKind::Slash && self.src.peek() == Some(&slash) {
+        //            self.src.next();
+        //            while let Some(c) = self.src.peek().copied() {
+        //                self.src.next();
+        //                if c == '\n' { break }
+        //            }
+        //
+        //            return None
+        //        }
 
         self.src.next();
         Some(Token {
@@ -151,15 +150,17 @@ impl<'src> Lexer<'src> {
     // TODO: Support escape characters such as \"
     fn parse_str(&mut self) -> Option<Token> {
         let mut len = 0u32;
-//      let mut temp = String::from("");
+        //      let mut temp = String::from("");
 
-        if self.src.peek().copied() != Some('"') { return None }
+        if self.src.peek().copied() != Some('"') {
+            return None;
+        }
         len += '"'.len_utf8() as u32;
         self.src.next();
-//      temp.push('"');
+        //      temp.push('"');
 
         while let Some(c) = self.src.peek().copied() {
-//          temp.push(c);
+            //          temp.push(c);
 
             len += c.len_utf8() as u32;
             self.src.next();
@@ -169,7 +170,7 @@ impl<'src> Lexer<'src> {
             }
         }
 
-//      println!("Sometihng --->>> {}", temp);
+        //      println!("Sometihng --->>> {}", temp);
         Some(Token {
             span: self.capture(len),
             kind: TokenKind::Str,

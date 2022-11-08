@@ -6,8 +6,7 @@ fn main() {
         panic!("Please supply file to parse");
     };
 
-    let input_file = fs::read_to_string(input)
-        .expect("Given file does not exist");
+    let input_file = fs::read_to_string(input).expect("Given file does not exist");
 
     println!("Parsing file contents -> \n{}", input_file);
 

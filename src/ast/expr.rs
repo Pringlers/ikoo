@@ -28,7 +28,7 @@ pub struct Lit {
 pub enum LitKind {
     Int,
     Float,
-    Str
+    Str,
 }
 
 #[derive(Clone, Copy, Debug)]

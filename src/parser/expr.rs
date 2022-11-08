@@ -43,11 +43,10 @@ impl<'src> Parser<'src> {
     }
 
     fn parse_expr_token(&mut self) -> Expr {
-//        This broke the strings, don't know why, but thing work without it
-//        if !is!(self, Expr) {
-//            self.expected("expression");
-//            return Expr::Poisoned;
-//        }
+        if !is!(self, Expr) {
+            self.expected("expression");
+            return Expr::Poisoned;
+        }
 
         match self.peek().kind {
             TokenKind::Identifier => self.parse_ident_expr(),
