@@ -67,19 +67,6 @@ impl<'src> Lexer<'src> {
             _ => return None,
         };
 
-        //        TODO: Implement comments - this currently doesn't work
-        //        // Check for a comment
-        //        let slash = '/';
-        //        if kind == TokenKind::Slash && self.src.peek() == Some(&slash) {
-        //            self.src.next();
-        //            while let Some(c) = self.src.peek().copied() {
-        //                self.src.next();
-        //                if c == '\n' { break }
-        //            }
-        //
-        //            return None
-        //        }
-
         self.src.next();
         Some(Token {
             span: self.capture(1),
@@ -155,7 +142,9 @@ impl<'src> Lexer<'src> {
         if self.src.peek().copied() != Some('"') {
             return None;
         }
+
         len += '"'.len_utf8() as u32;
+
         self.src.next();
         //      temp.push('"');
 
@@ -212,6 +201,7 @@ impl<'src> CachedLexer<'src> {
             }
             None => self.lexer.lex(),
         });
+        println!("{:?}", self.cur);
         self.cur()
     }
 
