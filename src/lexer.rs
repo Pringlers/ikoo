@@ -134,32 +134,26 @@ impl<'src> Lexer<'src> {
         }
     }
 
-    // TODO: Support escape characters such as \"
     fn parse_str(&mut self) -> Option<Token> {
         let mut len = 0u32;
-        //      let mut temp = String::from("");
+        loop {
+            let Some(c) = self.src.peek().copied() else {
+                return None;
+            };
 
-        if self.src.peek().copied() != Some('"') {
-            return None;
-        }
-
-        len += '"'.len_utf8() as u32;
-
-        self.src.next();
-        //      temp.push('"');
-
-        while let Some(c) = self.src.peek().copied() {
-            //          temp.push(c);
+            if len == 0 && c != '"' {
+                return None;
+            }
 
             len += c.len_utf8() as u32;
             self.src.next();
 
-            if c == '"' {
+            // break at terminating double quote
+            if len != 1 && c == '"' {
                 break;
             }
         }
 
-        //      println!("Sometihng --->>> {}", temp);
         Some(Token {
             span: self.capture(len),
             kind: TokenKind::Str,
@@ -201,7 +195,6 @@ impl<'src> CachedLexer<'src> {
             }
             None => self.lexer.lex(),
         });
-        println!("{:?}", self.cur);
         self.cur()
     }
 
