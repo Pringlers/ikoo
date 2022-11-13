@@ -50,7 +50,7 @@ impl<'src> Parser<'src> {
 
         match self.peek().kind {
             TokenKind::Identifier => self.parse_ident_expr(),
-            TokenKind::Int | TokenKind::Float => self.parse_literal(),
+            TokenKind::Int | TokenKind::Float | TokenKind::Str => self.parse_literal(),
             _ => unreachable!(),
         }
     }
@@ -75,7 +75,7 @@ impl<'src> Parser<'src> {
     fn parse_literal(&mut self) -> Expr {
         use TokenKind::*;
 
-        let Some(token) = next!(self, Int | Float) else {
+        let Some(token) = next!(self, Int | Float | Str) else {
             self.expected("literal");
             return Expr::Poisoned;
         };
@@ -83,6 +83,7 @@ impl<'src> Parser<'src> {
         let kind = match token.kind {
             Int => LitKind::Int,
             Float => LitKind::Float,
+            Str => LitKind::Str,
             _ => unreachable!("{:?}", token.kind),
         };
 

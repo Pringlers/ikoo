@@ -40,6 +40,10 @@ impl<'src> Lexer<'src> {
             return token;
         }
 
+        if let Some(token) = self.parse_str() {
+            return token;
+        }
+
         Token {
             span: self.capture(1),
             kind: TokenKind::Unknown,
@@ -62,6 +66,7 @@ impl<'src> Lexer<'src> {
             ',' => TokenKind::Comma,
             _ => return None,
         };
+
         self.src.next();
         Some(Token {
             span: self.capture(1),
@@ -127,6 +132,32 @@ impl<'src> Lexer<'src> {
                 kind: TokenKind::Identifier,
             })
         }
+    }
+
+    fn parse_str(&mut self) -> Option<Token> {
+        let mut len = 0u32;
+        loop {
+            let Some(c) = self.src.peek().copied() else {
+                return None;
+            };
+
+            if len == 0 && c != '"' {
+                return None;
+            }
+
+            len += c.len_utf8() as u32;
+            self.src.next();
+
+            // break at terminating double quote
+            if len != 1 && c == '"' {
+                break;
+            }
+        }
+
+        Some(Token {
+            span: self.capture(len),
+            kind: TokenKind::Str,
+        })
     }
 
     fn capture(&mut self, i: u32) -> Span {

@@ -19,6 +19,7 @@ pub enum TokenKind {
     Identifier,
     Int,
     Float,
+    Str,
     LParen,
     RParen,
     LBrace,

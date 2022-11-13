@@ -2,7 +2,7 @@ macro_rules! is {
     ($p:expr, Expr) => {{
         use $crate::token::TokenKind::*;
 
-        is!($p, Identifier | Int | Float)
+        is!($p, Identifier | Int | Float | Str)
     }};
     ($p:expr, $lit:literal) => {{
         let token = $p.peek();
